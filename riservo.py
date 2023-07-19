@@ -19,11 +19,11 @@ class RiServo:
 
         errCode = self.controller.lib.RI_SDK_CreateModelComponent("executor".encode(), "servodrive".encode(), servo_type.encode(), self.servo, self.errTextC)
         if errCode != 0:
-            raise Exception(f"add_servo: RI_SDK_CreateModelComponent failed with error code {errCode}: {self.err_msg()}")
+            raise Exception(f"RI_SDK_CreateModelComponent failed with error code {errCode}: {self.err_msg()}")
 
         errCode = self.controller.lib.RI_SDK_LinkServodriveToController(self.servo, self.controller.pwm, channel, self.errTextC)
         if errCode != 0:
-            raise Exception(f"add_servo: RI_SDK_LinkServodriveToController failed with error code {errCode}: {self.err_msg()}")   
+            raise Exception(f"RI_SDK_LinkServodriveToController failed with error code {errCode}: {self.err_msg()}")   
 
     def add_custom_servo(self, MaxDt, MinDt, MaxSpeed, RangeAngle, channel):
         self.controller.lib.RI_SDK_CreateDeviceComponent.argtypes = [c_char_p, c_char_p,  POINTER(c_int), c_char_p]
