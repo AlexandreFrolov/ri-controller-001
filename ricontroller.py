@@ -38,23 +38,23 @@ class RiController:
 
         errCode = self.lib.RI_SDK_InitSDK(1, self.errTextC)
         if errCode != 0:
-            raise Exception(f"init: RI_SDK_InitSDK failed with error code {errCode}: {self.err_msg()}")
+            raise Exception(f"RI_SDK_InitSDK failed with error code {errCode}: {self.err_msg()}")
 
         errCode = self.lib.RI_SDK_CreateBasic(descriptor, self.errTextC)
         if errCode != 0:
-            raise Exception(f"init: RI_SDK_CreateBasic failed with error code {errCode}: {self.err_msg()}")
+            raise Exception(f"RI_SDK_CreateBasic failed with error code {errCode}: {self.err_msg()}")
 
         errCode = self.lib.RI_SDK_CreateModelComponent("connector".encode(), "pwm".encode(), "pca9685".encode(), self.pwm, self.errTextC)
         if errCode != 0:
-            raise Exception(f"init: RI_SDK_CreateModelComponent failed with error code {errCode}: {self.err_msg()}")
+            raise Exception(f"RI_SDK_CreateModelComponent failed with error code {errCode}: {self.err_msg()}")
 
         errCode = self.lib.RI_SDK_CreateModelComponent("connector".encode(), "i2c_adapter".encode(), "ch341".encode(), self.i2c, self.errTextC)
         if errCode != 0:
-            raise Exception(f"init: RI_SDK_CreateModelComponent failed with error code {errCode}: {self.err_msg()}")
+            raise Exception(f"RI_SDK_CreateModelComponent failed with error code {errCode}: {self.err_msg()}")
 
         errCode = self.lib.RI_SDK_LinkPWMToController(self.pwm, self.i2c, c_uint8(0x40), self.errTextC)
         if errCode != 0:
-            raise Exception(f"init: RI_SDK_LinkPWMToController failed with error code {errCode}: {self.err_msg()}")
+            raise Exception(f"RI_SDK_LinkPWMToController failed with error code {errCode}: {self.err_msg()}")
 
     def cleanup(self):
         self.lib.RI_SDK_sigmod_PWM_ResetAll.argtypes = [c_int, c_char_p]
@@ -62,12 +62,12 @@ class RiController:
         self.lib.RI_SDK_DestroySDK.argtypes = [c_bool, c_char_p]
         errCode = self.lib.RI_SDK_sigmod_PWM_ResetAll(self.pwm, self.errTextC)
         if errCode != 0:
-            raise Exception(f"cleanup_final: RI_SDK_sigmod_PWM_ResetAll failed with error code {errCode}: {self.err_msg()}")
+            raise Exception(f"RI_SDK_sigmod_PWM_ResetAll failed with error code {errCode}: {self.err_msg()}")
 
         errCode = self.lib.RI_SDK_DestroyComponent(self.i2c, self.errTextC)
         if errCode != 0:
-            raise Exception(f"cleanup_final: RI_SDK_DestroyComponent failed with error code {errCode}: {self.err_msg()}")
+            raise Exception(f"RI_SDK_DestroyComponent failed with error code {errCode}: {self.err_msg()}")
 
         errCode = self.lib.RI_SDK_DestroySDK(True, self.errTextC)
         if errCode != 0:
-            raise Exception(f"cleanup_final: RI_SDK_DestroySDK failed with error code {errCode}: {self.err_msg()}")
+            raise Exception(f"RI_SDK_DestroySDK failed with error code {errCode}: {self.err_msg()}")
