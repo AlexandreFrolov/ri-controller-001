@@ -84,7 +84,6 @@ class RiRotateServo:
             raise Exception(f"RI_SDK_exec_RServoDrive_GetState failed with error code {errCode}: {self.err_msg()}")
         return self.state
 
-
     def cleanup_servo(self):
         self.controller.lib.RI_SDK_DestroyComponent.argtypes = [c_int, c_char_p]
         errCode = self.controller.lib.RI_SDK_DestroyComponent(self.rservo, self.errTextC)
