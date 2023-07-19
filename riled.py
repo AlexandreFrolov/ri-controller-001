@@ -6,7 +6,7 @@ from ctypes import *
 class RiLed:
     def __init__(self, controller):
         self.controller = controller
-        self.model_name = "RoboIntellect LED"
+        self.model_name = "ky016"
         self.errTextC = create_string_buffer(1000)
         self.state = c_int()
         self.led = c_int()
