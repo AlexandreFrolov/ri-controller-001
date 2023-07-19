@@ -53,11 +53,37 @@ class RiRotateServo:
         if errCode != 0:
             raise Exception(f"RI_SDK_exec_RServoDrive_RotateByPulse failed with error code {errCode}: {self.err_msg()}")
 
+    def rotate_by_pulse_over_time(self, dt, timeout):
+        self.controller.lib.RI_SDK_exec_RServoDrive_RotateByPulseOverTime.argtypes = [c_int, c_int, c_int, c_bool, c_char_p]
+        errCode = self.controller.lib.RI_SDK_exec_RServoDrive_RotateByPulseOverTime(self.rservo, dt, timeout, self.controller.is_async, self.errTextC)
+        if errCode != 0:
+            raise Exception(f"RI_SDK_exec_RServoDrive_RotateByPulseOverTime failed with error code {errCode}: {self.err_msg()}")
+
+    def rotate_at_speed(self, direction, speed):
+        self.controller.lib.RI_SDK_exec_RServoDrive_RotateWithRelativeSpeed.argtypes = [c_int, c_int, c_int, c_bool, c_char_p]
+        errCode = self.controller.lib.RI_SDK_exec_RServoDrive_RotateWithRelativeSpeed(self.rservo, direction, speed, self.controller.is_async, self.errTextC)
+        if errCode != 0:
+            raise Exception(f"RI_SDK_exec_RServoDrive_RotateWithRelativeSpeed failed with error code {errCode}: {self.err_msg()}")
+
+    def rotate_at_speed_over_time(self, direction, speed, timeout):
+        self.controller.lib.RI_SDK_exec_RServoDrive_RotateWithRelativeSpeedOverTime.argtypes = [c_int, c_int, c_int, c_int, c_bool, c_char_p]
+        errCode = self.controller.lib.RI_SDK_exec_RServoDrive_RotateWithRelativeSpeedOverTime(self.rservo, direction, speed, timeout, self.controller.is_async, self.errTextC)
+        if errCode != 0:
+            raise Exception(f"RI_SDK_exec_RServoDrive_RotateWithRelativeSpeedOverTime failed with error code {errCode}: {self.err_msg()}")
+
     def stop_rservo(self):
         self.controller.lib.RI_SDK_exec_RServoDrive_Stop.argtypes = [c_int, c_char_p]
         errCode = self.controller.lib.RI_SDK_exec_RServoDrive_Stop(self.rservo, self.errTextC)
         if errCode != 0:
             raise Exception(f"RI_SDK_exec_RServoDrive_Stop failed with error code {errCode}: {self.err_msg()}")
+
+    def get_state(self):
+        self.controller.lib.RI_SDK_exec_RServoDrive_GetState.argtypes = [c_int, POINTER(c_int), c_char_p]
+        errCode = self.controller.lib.RI_SDK_exec_RServoDrive_GetState(self.rservo, self.state, self.errTextC)
+        if errCode != 0:
+            raise Exception(f"RI_SDK_exec_RServoDrive_GetState failed with error code {errCode}: {self.err_msg()}")
+        return self.state
+
 
     def cleanup_servo(self):
         self.controller.lib.RI_SDK_DestroyComponent.argtypes = [c_int, c_char_p]
