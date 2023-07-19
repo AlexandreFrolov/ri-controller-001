@@ -93,7 +93,7 @@ class RiServo:
 
     def get_state(self):
         self.controller.lib.RI_SDK_exec_ServoDrive_GetState.argtypes = [c_int, POINTER(c_int), c_char_p]
-        errCode = self.controller.lib.RI_SDK_exec_ServoDrive_GetState(self.rservo, self.state, self.errTextC)
+        errCode = self.controller.lib.RI_SDK_exec_ServoDrive_GetState(self.servo, self.state, self.errTextC)
         if errCode != 0:
             raise Exception(f"RI_SDK_exec_ServoDrive_GetState failed with error code {errCode}: {self.err_msg()}")
         return self.state

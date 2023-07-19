@@ -1,8 +1,12 @@
 import sys
 import time
 from ctypes import *
+import traceback
 from ricontroller import RiController
 from riservo import RiServo
+
+def print_servo_state(servo):
+    print(f"Servo state: : {str(servo.get_state().value)}")
 
 if __name__ == "__main__":
     try:
@@ -14,11 +18,13 @@ if __name__ == "__main__":
         servo_1 = RiServo(controller)
         servo_1.add("mg90s", 0)
 
+        print_servo_state(servo_1)
         print("\nMG90S поворот в крайние положения")
 
         servo_1.rotate(0, 200)
         time.sleep(2) 
         print("servo_1 angle: " + str(servo_1.get_angle()))
+        print_servo_state(servo_1)
 
         servo_1.rotate(1, 200)
         time.sleep(2) 
