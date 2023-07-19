@@ -2,98 +2,97 @@
 import sys
 import time
 from ctypes import *
-from riapi import RiApi
+import traceback
+from ricontroller import RiController
+from riservo import RiServo
 
-def main():
+if __name__ == "__main__":
     try:
-        servo_1 = c_int() 
+        controller = RiController(c_bool(False))
+        print(f"Controller Model: {controller.model_name}")
+        
+        controller.init()
 
-        api = RiApi(c_bool(False))
-        api.init()
+        sg90 = RiServo(controller)
 
-        servo_1 = api.add_custom_servo(2350, 365, 200, 180, 0)
+        sg90.add_custom_servo(2350, 365, 200, 180, 0)
 
         print("\nSG90 поворот в крайние положения")
 
-        api.rotate(servo_1, 0, 200) # 2320 mc на осциллографе
+        sg90.rotate(0, 200)
         time.sleep(2) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1))) # угол 229
+        print("sg90 angle: " + str(sg90.get_angle()))
 
-        api.rotate(servo_1, 1, 200) # 330 mc на осциллографе
+        sg90.rotate(1, 200)
         time.sleep(2) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1))) # угол 0
+        print("sg90 angle: " + str(sg90.get_angle()))
 
-        api.set_middle(servo_1) # 1330 mc на осциллографе
+        sg90.set_middle()
         time.sleep(2) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1))) # угол 114
+        print("sg90 angle: " + str(sg90.get_angle()))
 
 
         print("\nSG90 управление через длительность импульсов")
 
-        api.turn_by_pulse(servo_1, 2350) # 2550 mc на осциллографе
+        sg90.turn_by_pulse(2350)
         time.sleep(2) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1))) # угол 229 (custom 207)
+        print("sg90 angle: " + str(sg90.get_angle()))
 
-        api.turn_by_pulse(servo_1, 365) # 330 mc на осциллографе
+        sg90.turn_by_pulse(365)
         time.sleep(2) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1))) # угол 0
+        print("sg90 angle: " + str(sg90.get_angle()))
         
-        api.turn_by_pulse(servo_1, 1360) # 1430 mc на осциллографе
+        sg90.turn_by_pulse(1500)
         time.sleep(2) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1))) # угол 114 (custom 103)
+        print("sg90 angle: " + str(sg90.get_angle()))
         
-   
+
         print("\nSG90 Минимальный шаг")
 
-        api.set_middle(servo_1) # 1330 mc на осциллографе
+        sg90.set_middle()
         time.sleep(2) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1))) # угол 114
+        print("sg90 angle: " + str(sg90.get_angle()))
 
 
-        api.rotate_min_step(servo_1, 1, 100)
+        sg90.rotate_min_step(1, 100)
         time.sleep(2) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1)))
+        print("sg90 angle: " + str(sg90.get_angle()))
 
-        api.rotate_min_step(servo_1, 0, 100)
+        sg90.rotate_min_step(0, 100)
         time.sleep(2) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1)))
-
+        print("sg90 angle: " + str(sg90.get_angle()))
 
         print("\nSG90 управление через Duty")
 
-        api.turn_by_duty(servo_1, 75)
+        sg90.turn_by_duty(75)
         time.sleep(2) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1)))
+        print("sg90 angle: " + str(sg90.get_angle()))
 
-        api.turn_by_duty(servo_1, 278)
+        sg90.turn_by_duty(278)
         time.sleep(2) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1)))
+        print("sg90 angle: " + str(sg90.get_angle()))
 
-        api.turn_by_duty(servo_1, 481)
+        sg90.turn_by_duty(481)
         time.sleep(2) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1)))
-
+        print("sg90 angle: " + str(sg90.get_angle()))
      
         print("\nSG90 поворот на заданный угол")
 
-        api.set_middle(servo_1) # 1330 mc на осциллографе
+        sg90.set_middle()
         time.sleep(2) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1))) # угол 114
+        print("sg90 angle: " + str(sg90.get_angle()))
 
-        api.turn_by_angle(servo_1, 90, 200)
+        sg90.turn_by_angle(90, 200)
         time.sleep(1) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1)))
+        print("sg90 angle: " + str(sg90.get_angle()))
 
-        api.turn_by_angle(servo_1, -90, 200)
+        sg90.turn_by_angle(-90, 200)
         time.sleep(1) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1)))
+        print("sg90 angle: " + str(sg90.get_angle()))
 
-        api.cleanup_servo(servo_1)
-        api.cleanup_final()
+        sg90.cleanup_servo()
+        controller.cleanup()
 
     except Exception as e:
-        print("Class RiApi Error:", str(e))
+        print(traceback.format_exc() + "===> ", str(e))
         sys.exit(2)
-
-if __name__ == "__main__":
-    main()

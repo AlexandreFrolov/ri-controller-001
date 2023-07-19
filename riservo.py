@@ -39,10 +39,11 @@ class RiServo:
         if errCode != 0:
             raise Exception(f"RI_SDK_exec_ServoDrive_CustomDeviceInit failed with error code {errCode}: {self.err_msg()}")
 
-        errCode = self.controller.lib.RI_SDK_LinkServodriveToController(servo, self.pwm, channel, self.errTextC)
+        errCode = self.controller.lib.RI_SDK_LinkServodriveToController(servo, self.controller.pwm, channel, self.errTextC)
         if errCode != 0:
             raise Exception(f"RI_SDK_LinkServodriveToController failed with error code {errCode}: {self.err_msg()}")     
 
+        self.servo = servo
         return(servo)
 
     def rotate(self, direction, speed):
