@@ -15,7 +15,7 @@ if __name__ == "__main__":
         rservo = RiRotateServo(controller)
 
         rservo.add("mg996r", 0)
-        rservo.stop_rservo()
+#        rservo.stop_rservo()
 
         print(1050)
         rservo.rotate_by_pulse(1050)

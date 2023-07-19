@@ -21,9 +21,9 @@ class RiRotateServo:
         if errCode != 0:
             raise Exception(f"RI_SDK_CreateModelComponent failed with error code {errCode}: {self.err_msg()}")
 
-        errCode = self.controller.lib.RI_SDK_LinkServodriveToController(self.rservo, self.controller.pwm, channel, self.errTextC)
+        errCode = self.controller.lib.RI_SDK_LinkRServodriveToController(self.rservo, self.controller.pwm, channel, self.errTextC)
         if errCode != 0:
-            raise Exception(f"RI_SDK_LinkServodriveToController failed with error code {errCode}: {self.err_msg()}")        
+            raise Exception(f"RI_SDK_LinkRServodriveToController failed with error code {errCode}: {self.err_msg()}")        
 
     def add_custom_servo(self, min_pulse, max_pulse, minPulseCounterClockwise, maxPulseCounterClockwise, channel):
         self.controller.lib.RI_SDK_CreateDeviceComponent.argtypes = [c_char_p, c_char_p,  POINTER(c_int), c_char_p]
