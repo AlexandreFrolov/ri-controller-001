@@ -11,25 +11,25 @@ if __name__ == "__main__":
         print(f"Controller Model: {controller.model_name}")
         
         controller.init()
-        ds04 = RiRotateServo(controller)
 
-        ds04.add_custom_servo(1050, 2100, 1050, 2100, 0)
-        ds04.stop_rservo()
+        rservo = RiRotateServo(controller)
+
+        rservo.add("mg996r", 0)
+        rservo.stop_rservo()
 
         print(1050)
-        ds04.rotate_by_pulse(1050)
+        rservo.rotate_by_pulse(1050)
         time.sleep(3) 
 
         print(2100)
-        ds04.rotate_by_pulse(2100)
+        rservo.rotate_by_pulse(2100)
         time.sleep(3) 
 
         print(1570)
-        ds04.rotate_by_pulse(1570)
+        rservo.rotate_by_pulse(1570)
         time.sleep(3) 
 
-
-        ds04.cleanup_servo()
+        rservo.cleanup_servo()
         controller.cleanup()
 
     except Exception as e:
