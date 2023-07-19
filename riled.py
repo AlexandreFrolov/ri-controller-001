@@ -21,7 +21,6 @@ class RiLed:
         errCode = self.controller.lib.RI_SDK_CreateModelComponent("executor".encode(), "led".encode(), "ky016".encode(), self.led, self.errTextC)
         if errCode != 0:
             raise Exception(f"RI_SDK_CreateModelComponent failed with error code {errCode}: {self.err_msg()}")
-    #    errCode = self.lib.RI_SDK_LinkLedToController(led, self.controller.pwm, 15, 14, 13, self.errTextC)
         errCode = self.controller.lib.RI_SDK_LinkLedToController(self.led, self.controller.pwm, r, g, b, self.errTextC)
         if errCode != 0:
             raise Exception(f"RI_SDK_LinkLedToController failed with error code {errCode}: {self.err_msg()}")
