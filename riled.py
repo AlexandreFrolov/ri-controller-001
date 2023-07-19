@@ -2,14 +2,13 @@ import sys
 import time
 import platform
 from ctypes import *
-from ricontroller import RiController
-import traceback
 
 class RiLed:
     def __init__(self, controller):
         self.controller = controller
         self.model_name = "RoboIntellect LED"
         self.errTextC = create_string_buffer(1000)
+        self.state = c_int()
         self.led = c_int()
 
     def err_msg(self):
@@ -60,3 +59,28 @@ class RiLed:
         errCode = self.controller.lib.RI_SDK_exec_RGB_LED_Flicker(self.led, r, g, b, duration, limit, self.controller.is_async, self.errTextC)
         if errCode != 0:
             raise Exception(f"RI_SDK_exec_RGB_LED_Flicker failed with error code {errCode}: {self.err_msg()}")
+
+    def get_state(self):
+        self.controller.lib.RI_SDK_exec_RGB_LED_GetState.argtypes = [c_int, POINTER(c_int), c_char_p]
+        errCode = self.controller.lib.RI_SDK_exec_RGB_LED_GetState(self.led, self.state, self.errTextC)
+        if errCode != 0:
+            raise Exception(f"RI_SDK_exec_RGB_LED_GetState failed with error code {errCode}: {self.err_msg()}")
+        return self.state
+
+    def get_color(self):
+        self.controller.lib.RI_SDK_exec_RGB_LED_GetColor.argtypes = [c_int, POINTER(c_int), POINTER(c_int), POINTER(c_int), c_char_p]
+        red = c_int()
+        green = c_int()
+        blue = c_int()
+        led_color = {
+         'red': red,
+         'green': green,
+         'blue': blue
+        }
+        errCode = self.controller.lib.RI_SDK_exec_RGB_LED_GetColor(self.led, red, green, blue, self.errTextC)
+        if errCode != 0:
+            raise Exception(f"RI_SDK_exec_RGB_LED_GetColor failed with error code {errCode}: {self.err_msg()}")
+        led_color['red'] = red
+        led_color['green'] = green
+        led_color['blue'] = blue
+        return led_color
