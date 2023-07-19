@@ -9,6 +9,7 @@ if __name__ == "__main__":
     try:
         controller = RiController(c_bool(False))
         print(f"Controller Model: {controller.model_name}")
+        
         controller.init()
 
         led = RiLed(controller)
